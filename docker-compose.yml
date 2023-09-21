@@ -1,27 +1,28 @@
-version: '3' #docker-version
+version: '3' # Version de Docker Compose
+
 services:
   www:
     image: php:apache
     volumes:
-      - "./:/var/www/html" #sync project to container
+      - "./:/var/www/html" # Montage du projet dans le conteneur
     ports:
-      - 81:81
-      - 80:80 #for future ssl traffic
+      - "80:80"
+      # - "443:443" # Pour le futur trafic SSL
 
   db:
     image: mysql:latest
     environment:
-      - MYSQL_DATABASE=php_docker #nom de la base de données
-      - MYSQL_USER=php_docker #username
-      - MYSQL_PASSWORD=password #this should live in a env var   #password
-      - MYSQL_ALLOW_EMPTY_PASSWORD=1 #like TRUE pour test
+      - MYSQL_DATABASE=php_docker # Nom de la base de données
+      - MYSQL_USER=php_docker # Nom d'utilisateur
+      - MYSQL_PASSWORD=password # Le mot de passe devrait être stocké dans une variable d'environnement
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1 # Pour les tests uniquement
     volumes:
-      - ./database:/var/lib/mysql # Montage d'un volume pour stocker les données
+      - "./database:/var/lib/mysql" # Montage d'un volume pour stocker les données de la base de données
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
-      - 8001:80
+      - "8001:80"
     environment:
       - PMA_HOST=db
       - PMA_PORT=3306
